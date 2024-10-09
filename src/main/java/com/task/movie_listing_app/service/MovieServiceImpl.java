@@ -24,5 +24,13 @@ public class MovieServiceImpl implements MovieService {
                 .sorted((m1, m2) -> m1.getTitle().compareToIgnoreCase(m2.getTitle()))
                 .collect(Collectors.toList());
     }
+    @Override
+    public Movie getMovieDetails(String title) {
+        return movies.stream()
+                .filter(movie -> movie.getTitle().equalsIgnoreCase(title))
+                .findFirst()
+                .orElse(null);
+        /// todo: here instead of handling error, I'll simply sending null for simplicity for now
+    }
 
 }

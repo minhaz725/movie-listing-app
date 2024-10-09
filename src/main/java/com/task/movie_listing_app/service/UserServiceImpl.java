@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
                 .filter(user -> user.getEmail().equalsIgnoreCase(email))
                 .findFirst()
                 .orElse(null);
+        /// todo: here instead of handling error, I'll simply sending null for simplicity for now
     }
     @Override
     public void addToFavorites(User user, Movie movie) {

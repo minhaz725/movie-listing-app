@@ -2,53 +2,68 @@ package com.task.movie_listing_app.service;
 
 import com.task.movie_listing_app.model.Movie;
 import com.task.movie_listing_app.model.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserServiceTest {
 
-    public static final String testUserEmail = "alice@gmail.com";
-
+    public static final String testUserEmail1 = "alice@gmail.com";
+    public static final String testUserEmail2 = "bob@gmail.com";
+    public static final Movie movie1 = new Movie("Deadpool 3", "Hugh Jackman", "Action, Comedy, Sci-Fi", LocalDate.of(2024, 5, 3), 150000000);
+    public static final Movie movie2 = new Movie("X-Men: Days of Future Past", "James McAvoy", "Action, Sci-Fi", LocalDate.of(2014, 5, 23), 200000000);
+    public static final Movie movie3 = new Movie("Oppenheimer", "Cillian Murphy", "Drama, History", LocalDate.of(2023, 7, 21), 100000000);
+    private UserService userService;
+    @BeforeEach
+    void setUp() {
+        userService = new UserServiceImpl();
+    }
     @Test
     void testRegisterUser() {
-        UserService userService = new UserServiceImpl();
 
-        User user = userService.registerUser(testUserEmail);
+        User user = userService.registerUser(testUserEmail1);
         assertNotNull(user);
-        assertEquals(testUserEmail, user.getEmail());
+        assertEquals(testUserEmail1, user.getEmail());
 
-        User sameUser = userService.registerUser(testUserEmail);
+        User sameUser = userService.registerUser(testUserEmail1);
         assertEquals(user, sameUser);
     }
 
     @Test
-    void testAddRemoveFavorites() {
-        UserService userService = new UserServiceImpl();
-        User user = userService.registerUser(testUserEmail);
+    void testRegisterMultipleUsers() {
+        User user1 = userService.registerUser(testUserEmail1);
+        User user2 = userService.registerUser(testUserEmail2);
 
-        Movie movie = new Movie("Deadpool 3", "Hugh Jackman", "Action, Comedy, Sci-Fi", LocalDate.of(2024, 5, 3), 150000000);
-        userService.addToFavorites(user, movie);
+        assertNotNull(user1);
+        assertNotNull(user2);
+        assertNotEquals(user1, user2);
+    }
+
+    @Test
+    void testAddRemoveFavorites() {
+
+        User user = userService.registerUser(testUserEmail1);
+
+        userService.addToFavorites(user, movie1);
 
         assertEquals(1, user.getFavorites().size());
         assertEquals("Deadpool 3", user.getFavorites().get(0).getTitle());
 
-        userService.removeFromFavorites(user, movie);
+        userService.removeFromFavorites(user, movie1);
         assertEquals(0, user.getFavorites().size());
     }
 
     @Test
     void testAddSameMovieTwice() {
-        UserService userService = new UserServiceImpl();
-        User user = userService.registerUser(testUserEmail);
 
-        Movie movie = new Movie("Deadpool 3", "Hugh Jackman", "Action, Comedy, Sci-Fi", LocalDate.of(2024, 5, 3), 150000000);
-        userService.addToFavorites(user, movie);
-        userService.addToFavorites(user, movie); // adding the same movie again
+        User user = userService.registerUser(testUserEmail1);
+
+        userService.addToFavorites(user, movie1);
+        userService.addToFavorites(user, movie1); // adding the same movie again
 
         assertEquals(1, user.getFavorites().size()); // size should still be 1
         assertEquals("Deadpool 3", user.getFavorites().get(0).getTitle());
@@ -56,14 +71,11 @@ public class UserServiceTest {
 
     @Test
     void testRemoveNonExistentMovie() {
-        UserService userService = new UserServiceImpl();
-        User user = userService.registerUser(testUserEmail);
 
-        Movie movie = new Movie("Deadpool 3", "Hugh Jackman", "Action, Comedy, Sci-Fi", LocalDate.of(2024, 5, 3), 150000000);
-        Movie anotherMovie = new Movie("X-Men: Days of Future Past", "James McAvoy", "Action, Sci-Fi", LocalDate.of(2014, 5, 23), 200000000);
+        User user = userService.registerUser(testUserEmail1);
 
-        userService.addToFavorites(user, movie);
-        userService.removeFromFavorites(user, anotherMovie); // removing a movie that wasn't added
+        userService.addToFavorites(user, movie1);
+        userService.removeFromFavorites(user, movie2); // removing a movie that wasn't added
 
         assertEquals(1, user.getFavorites().size()); // size should still be 1
         assertEquals("Deadpool 3", user.getFavorites().get(0).getTitle());
@@ -71,12 +83,8 @@ public class UserServiceTest {
 
     @Test
     void testGetUserFavorites() {
-        UserService userService = new UserServiceImpl();
-        User user = userService.registerUser(testUserEmail);
 
-        Movie movie1 = new Movie("Deadpool 3", "Hugh Jackman", "Action, Comedy, Sci-Fi", LocalDate.of(2024, 5, 3), 150000000);
-        Movie movie2 = new Movie("X-Men: Days of Future Past", "James McAvoy", "Action, Sci-Fi", LocalDate.of(2014, 5, 23), 200000000);
-        Movie movie3 = new Movie("Oppenheimer", "Cillian Murphy", "Drama, History", LocalDate.of(2023, 7, 21), 100000000);
+        User user = userService.registerUser(testUserEmail1);
 
         // add movies in unsorted order
         userService.addToFavorites(user, movie1);
@@ -93,6 +101,21 @@ public class UserServiceTest {
         assertEquals("Deadpool 3", favorites.get(0).getTitle());
         assertEquals("Oppenheimer", favorites.get(1).getTitle());
         assertEquals("X-Men: Days of Future Past", favorites.get(2).getTitle());
+    }
+
+    @Test
+    void testGetUserByEmail() {
+
+        userService.registerUser(testUserEmail1);
+
+        User foundUser = userService.getUserByEmail(testUserEmail1);
+        assertNotNull(foundUser);
+
+        assertEquals(testUserEmail1, foundUser.getEmail());
+
+        // test with an email that doesn't exist
+        User notFoundUser = userService.getUserByEmail(testUserEmail2);
+        assertNull(notFoundUser);
     }
 
 }
