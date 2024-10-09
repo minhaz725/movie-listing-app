@@ -2,12 +2,14 @@ package com.task.movie_listing_app.service;
 
 import com.task.movie_listing_app.model.Movie;
 import com.task.movie_listing_app.utils.Util;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class MovieServiceImpl implements MovieService {
     private final List<Movie> movies = new ArrayList<>();
     @Override

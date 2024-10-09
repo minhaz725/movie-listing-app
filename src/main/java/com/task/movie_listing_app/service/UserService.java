@@ -2,9 +2,10 @@ package com.task.movie_listing_app.service;
 
 import com.task.movie_listing_app.model.Movie;
 import com.task.movie_listing_app.model.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public interface UserService {
     User registerUser(String email);
     User getUserByEmail(String email);
