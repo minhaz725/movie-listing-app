@@ -8,8 +8,8 @@ import java.util.List;
 public interface UserService {
     User registerUser(String email);
     User getUserByEmail(String email);
-    void addToFavorites(User user, Movie movie);
-    void removeFromFavorites(User user, Movie movie);
-    List<Movie> getUserFavorites(User user);
-    List<Movie> searchFavoriteMovies(User user, String searchTerm);
+    void addToFavorites(String email, Movie movie);
+    void removeFromFavorites(String email, Movie movie);
+    List<Movie> getUserFavorites(String email);
+    List<Movie> searchFavoriteMovies(String email, String searchTerm);
 }

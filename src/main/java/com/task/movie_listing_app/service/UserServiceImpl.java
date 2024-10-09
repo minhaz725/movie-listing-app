@@ -41,7 +41,8 @@ public class UserServiceImpl implements UserService {
         /// todo: here instead of handling error, I'll simply sending null for simplicity for now
     }
     @Override
-    public void addToFavorites(User user, Movie movie) {
+    public void addToFavorites(String email, Movie movie) {
+        User user = getUserByEmail(email);
         if (!user.getFavorites().contains(movie)) {
             user.getFavorites().add(movie);
         } else {
@@ -49,19 +50,22 @@ public class UserServiceImpl implements UserService {
         }
     }
     @Override
-    public void removeFromFavorites(User user, Movie movie) {
+    public void removeFromFavorites(String email, Movie movie) {
+        User user = getUserByEmail(email);
         user.getFavorites().removeIf(favMovie -> favMovie.equals(movie));
     }
 
     @Override
-    public List<Movie> getUserFavorites(User user) {
+    public List<Movie> getUserFavorites(String email) {
+        User user = getUserByEmail(email);
         return user.getFavorites().stream()
                 .sorted(Comparator.comparing(Movie::getTitle))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Movie> searchFavoriteMovies(User user, String searchTerm) {
+    public List<Movie> searchFavoriteMovies(String email, String searchTerm) {
+        User user = getUserByEmail(email);
         return Util.filterMovies(user.getFavorites(), searchTerm);
     }
 }
