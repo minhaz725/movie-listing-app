@@ -1,6 +1,7 @@
 package com.task.movie_listing_app.service;
 
 import com.task.movie_listing_app.model.Movie;
+import com.task.movie_listing_app.utils.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,14 +16,7 @@ public class MovieServiceImpl implements MovieService {
     }
     @Override
     public List<Movie> searchMovies(String searchTerm) {
-        /// todo: for simplicity assuming single cast for now but keeping comma separated multiple categories
-        return movies.stream()
-                .filter(movie -> movie.getTitle().equalsIgnoreCase(searchTerm) ||
-                        movie.getCast().equalsIgnoreCase(searchTerm) ||
-                        Arrays.stream(movie.getCategory().split(", "))
-                                .anyMatch(category -> category.equalsIgnoreCase(searchTerm)))
-                .sorted((m1, m2) -> m1.getTitle().compareToIgnoreCase(m2.getTitle()))
-                .collect(Collectors.toList());
+        return Util.filterMovies(movies, searchTerm);
     }
     @Override
     public Movie getMovieDetails(String title) {

@@ -2,6 +2,7 @@ package com.task.movie_listing_app.service;
 
 import com.task.movie_listing_app.model.Movie;
 import com.task.movie_listing_app.model.User;
+import com.task.movie_listing_app.utils.Util;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -57,5 +58,10 @@ public class UserServiceImpl implements UserService {
         return user.getFavorites().stream()
                 .sorted(Comparator.comparing(Movie::getTitle))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Movie> searchFavoriteMovies(User user, String searchTerm) {
+        return Util.filterMovies(user.getFavorites(), searchTerm);
     }
 }

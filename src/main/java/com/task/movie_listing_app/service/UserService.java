@@ -11,4 +11,5 @@ public interface UserService {
     void addToFavorites(User user, Movie movie);
     void removeFromFavorites(User user, Movie movie);
     List<Movie> getUserFavorites(User user);
+    List<Movie> searchFavoriteMovies(User user, String searchTerm);
 }
