@@ -15,6 +15,7 @@ public class MovieServiceImpl implements MovieService {
     }
     @Override
     public List<Movie> searchMovies(String searchTerm) {
+        /// todo: for simplicity assuming single cast for now but keeping comma separated multiple categories
         return movies.stream()
                 .filter(movie -> movie.getTitle().equalsIgnoreCase(searchTerm) ||
                         movie.getCast().equalsIgnoreCase(searchTerm) ||
