@@ -58,4 +58,22 @@ public class MovieServiceTest {
         MovieModel nonExistentMovie = movieService.getMovieDetails("Nonexistent Movie");
         assertNull(nonExistentMovie);
     }
+
+    @Test
+    void testAddMovie() {
+        MovieCreationRequest movie5 = new MovieCreationRequest("Peaky Blinkders", "Cillian Murphy", "Crime, Drama, History", LocalDate.of(2024, 7, 21), 100000000);
+
+        String result1 = movieService.addMovie(movie5);
+        assertEquals("Movie added successfully.", result1);
+
+        String result2 = movieService.addMovie(movie5);
+        assertEquals("Movie is already present in the movies list.", result2);
+
+        List<MovieModel> foundMovies = movieService.searchMovies(movie5.getTitle());
+        assertFalse(foundMovies.isEmpty());
+        MovieModel addedMovie = foundMovies.get(0);
+        assertNotNull(addedMovie);
+        assertEquals(movie5.getTitle(), addedMovie.getTitle());
+        assertEquals(movie5.getCategory(), addedMovie.getCategory());
+    }
 }

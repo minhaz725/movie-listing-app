@@ -1,6 +1,7 @@
 package com.task.movie_listing_app.controller;
 
 import com.task.movie_listing_app.model.MovieModel;
+import com.task.movie_listing_app.payload.req.MovieCreationRequest;
 import com.task.movie_listing_app.service.MovieService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -28,12 +30,30 @@ public class MovieControllerTest {
     private MovieService movieService;
 
     @Test
-    public void testAddMovie() throws Exception {
+    void testAddMovieSuccess() throws Exception {
+        MovieCreationRequest request = new MovieCreationRequest();
+        request.setTitle("Oppenheimer");
+
+        when(movieService.addMovie(any(MovieCreationRequest.class)))
+                .thenReturn("Movie added successfully.");
+
         mockMvc.perform(post("/movies/add")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\": \"Oppenheimer\", \"actor\": \"Cillian Murphy\"}"))
+                        .content("{\"title\": \"Oppenheimer\", \"genre\": \"Drama\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Movie added successfully."));
+    }
+
+    @Test
+    void testAddMovieAlreadyExists() throws Exception {
+        when(movieService.addMovie(any(MovieCreationRequest.class)))
+                .thenReturn("Movie is already present in the movies list.");
+
+        mockMvc.perform(post("/movies/add")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\": \"Oppenheimer\", \"genre\": \"Drama\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Movie is already present in the movies list."));
     }
 
     @Test

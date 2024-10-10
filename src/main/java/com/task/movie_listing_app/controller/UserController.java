@@ -25,9 +25,9 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserModel> registerUser(@RequestBody UserCreationRequest userCreationRequest) {
-        UserModel user = userService.registerUser(userCreationRequest.getEmail());
-        return ResponseEntity.ok(user);
+    public ResponseEntity<String> registerUser(@RequestBody UserCreationRequest userCreationRequest) {
+        String msg = userService.registerUser(userCreationRequest.getEmail());
+        return ResponseEntity.ok(msg);
     }
 
     @PostMapping("/{email}/favorites")

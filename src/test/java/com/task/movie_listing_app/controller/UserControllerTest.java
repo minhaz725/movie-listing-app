@@ -1,7 +1,6 @@
 package com.task.movie_listing_app.controller;
 
 import com.task.movie_listing_app.model.MovieModel;
-import com.task.movie_listing_app.model.UserModel;
 import com.task.movie_listing_app.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -29,15 +27,29 @@ class UserControllerTest {
     private UserService userService;
 
     @Test
-    void testRegisterUser() throws Exception {
-        UserModel user = new UserModel("test@example.com", new ArrayList<>());
-        when(userService.registerUser(anyString())).thenReturn(user);
+    void testRegisterUserSuccess() throws Exception {
+        String email = "test@example.com";
+        when(userService.registerUser(email))
+                .thenReturn("User registered successfully");
 
         mockMvc.perform(post("/users/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"email\": \"test@example.com\"}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("test@example.com"));
+                .andExpect(content().string("User registered successfully"));
+    }
+
+    @Test
+    void testRegisterUserAlreadyExists() throws Exception {
+        String email = "test@example.com";
+        when(userService.registerUser(email))
+                .thenReturn("User is already registered.");
+
+        mockMvc.perform(post("/users/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\": \"test@example.com\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("User is already registered."));
     }
 
     @Test

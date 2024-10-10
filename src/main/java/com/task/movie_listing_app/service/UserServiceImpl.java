@@ -21,13 +21,12 @@ public class UserServiceImpl implements UserService {
     private final List<UserModel> users = new ArrayList<>();
 
     @Override
-    public UserModel registerUser(String email) {
+    public String registerUser(String email) {
 
         UserModel existingUser = getUserByEmail(email);
         if (existingUser != null) {
             log.info("User is already registered.");
-            return existingUser;
-            /// todo: here instead of handling error, I'll simply sending the existing user for simplicity for now
+            return "User is already registered.";
         }
 
         UserModel newUser = UserModel.builder()
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService {
                 .favorites(new ArrayList<>())
                 .build();
         users.add(newUser);
-        return newUser;
+        return "User registered successfully";
     }
 
     @Override
@@ -53,7 +52,6 @@ public class UserServiceImpl implements UserService {
         List<MovieModel> movieList = movieService.searchMovies(title);
         if (movieList.isEmpty()) {
             log.info("Movie doesn't exist in DB.");
-            /// todo: here instead of handling error, I'll simply logging for simplicity for now
             return "Movie doesn't exist in DB.";
         }
         if (!user.getFavorites().contains(movieList.get(0))) {
@@ -70,7 +68,6 @@ public class UserServiceImpl implements UserService {
         List<MovieModel> movieList = searchFavoriteMovies(user.getEmail(), title);
         if (movieList.isEmpty()) {
             log.info("Movie doesn't exist in Users favorite list.");
-            /// todo: here instead of handling error, I'll simply logging for simplicity for now
             return "Movie doesn't exist in Users favorite list.";
         }
         user.getFavorites().removeIf(favMovie -> favMovie.equals(movieList.get(0)));

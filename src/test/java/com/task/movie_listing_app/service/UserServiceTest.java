@@ -37,22 +37,33 @@ public class UserServiceTest {
 
     @Test
     void testRegisterUser() {
-        UserModel user = userService.registerUser(testUserEmail1);
-        assertNotNull(user);
-        assertEquals(testUserEmail1, user.getEmail());
+        String result1 = userService.registerUser(testUserEmail1);
+        assertEquals("User registered successfully", result1);
 
-        UserModel sameUser = userService.registerUser(testUserEmail1);
-        assertEquals(user, sameUser);
+        String result2 = userService.registerUser(testUserEmail1);
+        assertEquals("User is already registered.", result2);
+
+        UserModel addedUser = userService.getUserByEmail(testUserEmail1);
+        assertNotNull(addedUser);
+        assertEquals(testUserEmail1, addedUser.getEmail());
     }
 
     @Test
     void testRegisterMultipleUsers() {
-        UserModel user1 = userService.registerUser(testUserEmail1);
-        UserModel user2 = userService.registerUser(testUserEmail2);
+        String result1 = userService.registerUser(testUserEmail1);
+        assertEquals("User registered successfully", result1);
+
+        String result2 = userService.registerUser(testUserEmail2);
+        assertEquals("User registered successfully", result2);
+
+        UserModel user1 = userService.getUserByEmail(testUserEmail1);
+        UserModel user2 = userService.getUserByEmail(testUserEmail2);
 
         assertNotNull(user1);
         assertNotNull(user2);
         assertNotEquals(user1, user2);
+        assertEquals(testUserEmail1, user1.getEmail());
+        assertEquals(testUserEmail2, user2.getEmail());
     }
 
     @Test

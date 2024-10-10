@@ -40,14 +40,15 @@ public class MovieServiceImpl implements MovieService {
         movies.add(movie4);
     }
     @Override
-    public void addMovie(MovieCreationRequest request) {
+    public String addMovie(MovieCreationRequest request) {
         MovieModel movieModel = getMovieDetails(request.getTitle());
         if(movieModel != null) {
             // assuming every movie has unique title
             log.info("Movie is already present in the movies list.");
-            return;
+            return "Movie is already present in the movies list.";
         }
         movies.add(Util.convertMovieCreationRequestToMovieModel(request));
+        return "Movie added successfully.";
     }
     @Override
     public List<MovieModel> searchMovies(String searchTerm) {

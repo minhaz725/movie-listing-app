@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 @Service
 public interface UserService {
-    UserModel registerUser(String email);
+    String registerUser(String email);
     UserModel getUserByEmail(String email);
 
     // adding or removing movie with only title for simplicity
