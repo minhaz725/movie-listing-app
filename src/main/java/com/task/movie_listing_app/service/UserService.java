@@ -1,16 +1,16 @@
 package com.task.movie_listing_app.service;
 
-import com.task.movie_listing_app.model.Movie;
-import com.task.movie_listing_app.model.User;
+import com.task.movie_listing_app.model.MovieModel;
+import com.task.movie_listing_app.model.UserModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
 public interface UserService {
-    User registerUser(String email);
-    User getUserByEmail(String email);
-    void addToFavorites(String email, Movie movie);
-    void removeFromFavorites(String email, Movie movie);
-    List<Movie> getUserFavorites(String email);
-    List<Movie> searchFavoriteMovies(String email, String searchTerm);
+    UserModel registerUser(String email);
+    UserModel getUserByEmail(String email);
+    void addToFavorites(String email, MovieModel movie);
+    void removeFromFavorites(String email, MovieModel movie);
+    List<MovieModel> getUserFavorites(String email);
+    List<MovieModel> searchFavoriteMovies(String email, String searchTerm);
 }

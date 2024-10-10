@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Movie {
+public class MovieModel {
     private String title;
     private String cast;
     private String category;

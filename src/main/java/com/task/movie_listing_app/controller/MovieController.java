@@ -1,6 +1,6 @@
 package com.task.movie_listing_app.controller;
 
-import com.task.movie_listing_app.model.Movie;
+import com.task.movie_listing_app.model.MovieModel;
 import com.task.movie_listing_app.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,20 +20,20 @@ public class MovieController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addMovie(@RequestBody Movie movie) {
+    public ResponseEntity<String> addMovie(@RequestBody MovieModel movie) {
         movieService.addMovie(movie);
         return ResponseEntity.ok("Movie added successfully.");
     }
 
     @GetMapping("/search/{searchTerm}")
-    public ResponseEntity<List<Movie>> searchMovies(@PathVariable String searchTerm) {
-        List<Movie> movies = movieService.searchMovies(searchTerm);
+    public ResponseEntity<List<MovieModel>> searchMovies(@PathVariable String searchTerm) {
+        List<MovieModel> movies = movieService.searchMovies(searchTerm);
         return ResponseEntity.ok(movies);
     }
 
     @GetMapping("/{title}/details")
-    public ResponseEntity<Movie> getMovieDetails(@PathVariable String title) {
-        Movie movie = movieService.getMovieDetails(title);
+    public ResponseEntity<MovieModel> getMovieDetails(@PathVariable String title) {
+        MovieModel movie = movieService.getMovieDetails(title);
         if (movie == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }

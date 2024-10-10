@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class UserModel {
     private String email;
-    private List<Movie> favorites;
+    private List<MovieModel> favorites;
 }
