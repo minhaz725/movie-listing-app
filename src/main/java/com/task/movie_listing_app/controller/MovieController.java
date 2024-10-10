@@ -40,4 +40,10 @@ public class MovieController {
         }
         return ResponseEntity.ok(movie);
     }
+
+    @GetMapping("")
+    public ResponseEntity<List<MovieModel>> getAllMovies() {
+        List<MovieModel> movies = movieService.getAllMovies();
+        return ResponseEntity.ok(movies);
+    }
 }

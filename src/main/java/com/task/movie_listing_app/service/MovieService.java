@@ -10,4 +10,6 @@ public interface MovieService {
     List<MovieModel> searchMovies(String searchTerm);
     MovieModel getMovieDetails(String title);
     ///todo: assuming movie details query will be asked by title only for now, can be improved
+    List<MovieModel> getAllMovies();
+
 }

@@ -49,5 +49,9 @@ To run this project, you need:
    
 The application should now be running on http://localhost:10000/movie-listing-app/api/v1
 
+## Pre Populate
+As the project got volatile data, added a property movies.populate in app properties, if it's set true,
+then you will get some sample movie data already populated.
+
 ## API Documentation
 For detailed API documentation, please visit the [Swagger API Documentation](http://localhost:10000/movie-listing-app/api/v1/swagger-ui/index.html#/).
