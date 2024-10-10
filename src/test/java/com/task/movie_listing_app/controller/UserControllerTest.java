@@ -41,21 +41,75 @@ class UserControllerTest {
     }
 
     @Test
-    void testAddToFavorites() throws Exception {
-        mockMvc.perform(post("/users/test@example.com/favorites")
+    void testAddToFavoritesSuccess() throws Exception {
+
+        String email = "test@example.com";
+        String title = "Oppenheimer";
+        when(userService.addToFavorites(email, title))
+                .thenReturn("Movie added to favorites.");
+
+        mockMvc.perform(post("/users/" + email + "/favorites")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\": \"Oppenheimer\"}"))
+                        .content("{\"title\": \"" + title + "\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Movie added to favorites."));
     }
 
     @Test
-    void testRemoveFromFavorites() throws Exception {
-        mockMvc.perform(delete("/users/test@example.com/favorites")
+    void testAddToFavoritesWhenMovieDoesntExist() throws Exception {
+        // Given
+        String email = "test@example.com";
+        String title = "NonExistentMovie";
+        when(userService.addToFavorites(email, title))
+                .thenReturn("Movie doesn't exist in DB.");
+
+        mockMvc.perform(post("/users/" + email + "/favorites")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\": \"Oppenheimer\"}"))
+                        .content("{\"title\": \"" + title + "\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Movie doesn't exist in DB."));
+    }
+
+    @Test
+    void testAddToFavoritesWhenMovieAlreadyInFavorites() throws Exception {
+        String email = "test@example.com";
+        String title = "Oppenheimer";
+        when(userService.addToFavorites(email, title))
+                .thenReturn("Movie is already in the favorites list.");
+
+        mockMvc.perform(post("/users/" + email + "/favorites")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\": \"" + title + "\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Movie is already in the favorites list."));
+    }
+
+    @Test
+    void testRemoveFromFavoritesSuccess() throws Exception {
+        String email = "test@example.com";
+        String title = "Oppenheimer";
+        when(userService.removeFromFavorites(email, title))
+                .thenReturn("Movie removed from favorites.");
+
+        mockMvc.perform(delete("/users/" + email + "/favorites")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\": \"" + title + "\"}"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Movie removed from favorites."));
+    }
+
+    @Test
+    void testRemoveFromFavoritesWhenMovieNotInFavorites() throws Exception {
+        String email = "test@example.com";
+        String title = "Oppenheimer";
+        when(userService.removeFromFavorites(email, title))
+                .thenReturn("Movie is not in the favorites list.");
+
+        mockMvc.perform(delete("/users/" + email + "/favorites")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\": \"" + title + "\"}"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Movie is not in the favorites list."));
     }
 
     @Test

@@ -47,31 +47,34 @@ public class UserServiceImpl implements UserService {
         /// todo: here instead of handling error, I'll simply sending null for simplicity for now
     }
     @Override
-    public void addToFavorites(String email, String title) {
+    public String addToFavorites(String email, String title) {
         UserModel user = getUserByEmail(email);
         // assuming every movie has unique title
         List<MovieModel> movieList = movieService.searchMovies(title);
         if (movieList.isEmpty()) {
             log.info("Movie doesn't exist in DB.");
             /// todo: here instead of handling error, I'll simply logging for simplicity for now
-            return;
+            return "Movie doesn't exist in DB.";
         }
         if (!user.getFavorites().contains(movieList.get(0))) {
             user.getFavorites().add(movieList.get(0));
         } else {
             log.info("Movie is already in the favorites list.");
+            return "Movie is already in the favorites list.";
         }
+        return "Movie added to favorites.";
     }
     @Override
-    public void removeFromFavorites(String email, String title) {
+    public String removeFromFavorites(String email, String title) {
         UserModel user = getUserByEmail(email);
         List<MovieModel> movieList = searchFavoriteMovies(user.getEmail(), title);
         if (movieList.isEmpty()) {
             log.info("Movie doesn't exist in Users favorite list.");
             /// todo: here instead of handling error, I'll simply logging for simplicity for now
-            return;
+            return "Movie doesn't exist in Users favorite list.";
         }
         user.getFavorites().removeIf(favMovie -> favMovie.equals(movieList.get(0)));
+        return "Movie removed from favorites.";
     }
 
     @Override

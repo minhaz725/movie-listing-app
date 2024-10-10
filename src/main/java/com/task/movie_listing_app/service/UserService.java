@@ -12,8 +12,8 @@ public interface UserService {
     UserModel getUserByEmail(String email);
 
     // adding or removing movie with only title for simplicity
-    void addToFavorites(String email, String title);
-    void removeFromFavorites(String email, String title);
+    String addToFavorites(String email, String title);
+    String removeFromFavorites(String email, String title);
     List<MovieModel> getUserFavorites(String email);
     List<MovieModel> searchFavoriteMovies(String email, String searchTerm);
 }

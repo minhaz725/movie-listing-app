@@ -5,6 +5,7 @@ import com.task.movie_listing_app.model.UserModel;
 import com.task.movie_listing_app.payload.req.MovieAddOrRemoveToFavoriteRequest;
 import com.task.movie_listing_app.payload.req.UserCreationRequest;
 import com.task.movie_listing_app.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -30,14 +32,14 @@ public class UserController {
 
     @PostMapping("/{email}/favorites")
     public ResponseEntity<String> addMovieToFavorites(@PathVariable String email, @RequestBody MovieAddOrRemoveToFavoriteRequest request) {
-        userService.addToFavorites(email, request.getTitle());
-        return ResponseEntity.ok("Movie added to favorites.");
+        String msg = userService.addToFavorites(email, request.getTitle());
+        return ResponseEntity.ok(msg);
     }
 
     @DeleteMapping("/{email}/favorites")
     public ResponseEntity<String> removeMovieFromFavorites(@PathVariable String email, @RequestBody MovieAddOrRemoveToFavoriteRequest request) {
-        userService.removeFromFavorites(email, request.getTitle());
-        return ResponseEntity.ok("Movie removed from favorites.");
+        String msg = userService.removeFromFavorites(email, request.getTitle());
+        return ResponseEntity.ok(msg);
     }
 
     @GetMapping("/{email}/favorites")

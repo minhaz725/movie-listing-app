@@ -59,15 +59,17 @@ public class UserServiceTest {
     void testAddRemoveFavorites() {
         registerUserAndMockMovies(testUserEmail1, movie1);
 
-        userService.addToFavorites(testUserEmail1, movie1.getTitle());
-        List<MovieModel> favorites = userService.getUserFavorites(testUserEmail1);
+        String addResult = userService.addToFavorites(testUserEmail1, movie1.getTitle());
+        assertEquals("Movie added to favorites.", addResult);
 
+        List<MovieModel> favorites = userService.getUserFavorites(testUserEmail1);
         assertEquals(1, favorites.size());
         assertEquals(movie1.getTitle(), favorites.get(0).getTitle());
 
-        userService.removeFromFavorites(testUserEmail1, movie1.getTitle());
-        favorites = userService.getUserFavorites(testUserEmail1);
+        String removeResult = userService.removeFromFavorites(testUserEmail1, movie1.getTitle());
+        assertEquals("Movie removed from favorites.", removeResult);
 
+        favorites = userService.getUserFavorites(testUserEmail1);
         assertEquals(0, favorites.size());
     }
 
@@ -75,12 +77,14 @@ public class UserServiceTest {
     void testAddSameMovieTwice() {
         registerUserAndMockMovies(testUserEmail1, movie1);
 
-        userService.addToFavorites(testUserEmail1, movie1.getTitle());
-        userService.addToFavorites(testUserEmail1, movie1.getTitle()); // adding the same movie again
+        String addResult = userService.addToFavorites(testUserEmail1, movie1.getTitle());
+        assertEquals("Movie added to favorites.", addResult);
+
+        String addResultAgain = userService.addToFavorites(testUserEmail1, movie1.getTitle());
+        assertEquals("Movie is already in the favorites list.", addResultAgain);
 
         List<MovieModel> favorites = userService.getUserFavorites(testUserEmail1);
-
-        assertEquals(1, favorites.size()); // size should still be 1
+        assertEquals(1, favorites.size()); // Size should still be 1
         assertEquals(movie1.getTitle(), favorites.get(0).getTitle());
     }
 
@@ -88,14 +92,17 @@ public class UserServiceTest {
     void testRemoveNonExistentMovie() {
         registerUserAndMockMovies(testUserEmail1, movie1);
 
-        userService.addToFavorites(testUserEmail1, movie1.getTitle());
-        userService.removeFromFavorites(testUserEmail1, movie2.getTitle()); // removing a movie that wasn't added
+        String addResult = userService.addToFavorites(testUserEmail1, movie1.getTitle());
+        assertEquals("Movie added to favorites.", addResult);
+
+        String removeResult = userService.removeFromFavorites(testUserEmail1, movie2.getTitle());
+        assertEquals("Movie doesn't exist in Users favorite list.", removeResult);
 
         List<MovieModel> favorites = userService.getUserFavorites(testUserEmail1);
-
-        assertEquals(1, favorites.size()); // size should still be 1
-        assertEquals("Deadpool 3", favorites.get(0).getTitle());
+        assertEquals(1, favorites.size()); // Size should still be 1
+        assertEquals(movie1.getTitle(), favorites.get(0).getTitle());
     }
+
 
     @Test
     void testGetUserFavorites() {
