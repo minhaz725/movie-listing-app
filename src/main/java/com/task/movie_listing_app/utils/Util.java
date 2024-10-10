@@ -1,6 +1,7 @@
 package com.task.movie_listing_app.utils;
 
 import com.task.movie_listing_app.model.MovieModel;
+import com.task.movie_listing_app.payload.req.MovieCreationRequest;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -17,6 +18,16 @@ public class Util {
                                 .anyMatch(category -> category.equalsIgnoreCase(searchTerm)))
                 .sorted(Comparator.comparing(MovieModel::getTitle))
                 .collect(Collectors.toList());
+    }
+
+    public static MovieModel convertMovieCreationRequestToMovieModel(MovieCreationRequest request) {
+        return MovieModel.builder()
+                .title(request.getTitle())
+                .category(request.getCategory())
+                .cast(request.getCast())
+                .releaseDate(request.getReleaseDate())
+                .budget(request.getBudget())
+                .build();
     }
 
 }

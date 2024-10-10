@@ -1,6 +1,7 @@
 package com.task.movie_listing_app.controller;
 
 import com.task.movie_listing_app.model.MovieModel;
+import com.task.movie_listing_app.payload.req.MovieCreationRequest;
 import com.task.movie_listing_app.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class MovieController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addMovie(@RequestBody MovieModel movie) {
+    public ResponseEntity<String> addMovie(@RequestBody MovieCreationRequest movie) {
         movieService.addMovie(movie);
         return ResponseEntity.ok("Movie added successfully.");
     }

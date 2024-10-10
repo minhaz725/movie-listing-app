@@ -1,18 +1,27 @@
 package com.task.movie_listing_app.service;
 
 import com.task.movie_listing_app.model.MovieModel;
+import com.task.movie_listing_app.payload.req.MovieCreationRequest;
 import com.task.movie_listing_app.utils.Util;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class MovieServiceImpl implements MovieService {
     private final List<MovieModel> movies = new ArrayList<>();
     @Override
-    public void addMovie(MovieModel movie) {
-        movies.add(movie);
+    public void addMovie(MovieCreationRequest request) {
+        MovieModel movieModel = getMovieDetails(request.getTitle());
+        if(movieModel != null) {
+            // assuming every movie has unique title
+            log.info("Movie is already present in the movies list.");
+            return;
+        }
+        movies.add(Util.convertMovieCreationRequestToMovieModel(request));
     }
     @Override
     public List<MovieModel> searchMovies(String searchTerm) {

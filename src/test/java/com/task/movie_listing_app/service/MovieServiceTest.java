@@ -1,6 +1,7 @@
 package com.task.movie_listing_app.service;
 
 import com.task.movie_listing_app.model.MovieModel;
+import com.task.movie_listing_app.payload.req.MovieCreationRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,10 +17,10 @@ public class MovieServiceTest {
     void setUp() {
         movieService = new MovieServiceImpl();
 
-        MovieModel movie1 = new MovieModel("Oppenheimer", "Cillian Murphy", "Biography, Drama, History", LocalDate.of(2023, 7, 21), 100000000);
-        MovieModel movie2 = new MovieModel("Exhuma", "Choi Min-sik", "Horror, Thriller, Drama", LocalDate.of(2024, 2, 22), 15000000);
-        MovieModel movie3 = new MovieModel("Deadpool 3", "Hugh Jackman", "Action, Comedy, Sci-Fi", LocalDate.of(2024, 5, 3), 150000000);
-        MovieModel movie4 = new MovieModel("X-Men: Days of Future Past", "Hugh Jackman", "Action, Adventure, Sci-Fi", LocalDate.of(2014, 5, 23), 200000000);
+        MovieCreationRequest movie1 = new MovieCreationRequest("Oppenheimer", "Cillian Murphy", "Biography, Drama, History", LocalDate.of(2023, 7, 21), 100000000);
+        MovieCreationRequest movie2 = new MovieCreationRequest("Exhuma", "Choi Min-sik", "Horror, Thriller, Drama", LocalDate.of(2024, 2, 22), 15000000);
+        MovieCreationRequest movie3 = new MovieCreationRequest("Deadpool 3", "Hugh Jackman", "Action, Comedy, Sci-Fi", LocalDate.of(2024, 5, 3), 150000000);
+        MovieCreationRequest movie4 = new MovieCreationRequest("X-Men: Days of Future Past", "Hugh Jackman", "Action, Adventure, Sci-Fi", LocalDate.of(2014, 5, 23), 200000000);
 
         movieService.addMovie(movie1);
         movieService.addMovie(movie2);

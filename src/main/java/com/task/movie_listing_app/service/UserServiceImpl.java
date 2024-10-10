@@ -4,6 +4,7 @@ import com.task.movie_listing_app.model.MovieModel;
 import com.task.movie_listing_app.model.UserModel;
 import com.task.movie_listing_app.utils.Util;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private MovieService movieService;
     private final List<UserModel> users = new ArrayList<>();
 
     @Override
@@ -43,18 +47,31 @@ public class UserServiceImpl implements UserService {
         /// todo: here instead of handling error, I'll simply sending null for simplicity for now
     }
     @Override
-    public void addToFavorites(String email, MovieModel movie) {
+    public void addToFavorites(String email, String title) {
         UserModel user = getUserByEmail(email);
-        if (!user.getFavorites().contains(movie)) {
-            user.getFavorites().add(movie);
+        // assuming every movie has unique title
+        List<MovieModel> movieList = movieService.searchMovies(title);
+        if (movieList.isEmpty()) {
+            log.info("Movie doesn't exist in DB.");
+            /// todo: here instead of handling error, I'll simply logging for simplicity for now
+            return;
+        }
+        if (!user.getFavorites().contains(movieList.get(0))) {
+            user.getFavorites().add(movieList.get(0));
         } else {
             log.info("Movie is already in the favorites list.");
         }
     }
     @Override
-    public void removeFromFavorites(String email, MovieModel movie) {
+    public void removeFromFavorites(String email, String title) {
         UserModel user = getUserByEmail(email);
-        user.getFavorites().removeIf(favMovie -> favMovie.equals(movie));
+        List<MovieModel> movieList = searchFavoriteMovies(user.getEmail(), title);
+        if (movieList.isEmpty()) {
+            log.info("Movie doesn't exist in Users favorite list.");
+            /// todo: here instead of handling error, I'll simply logging for simplicity for now
+            return;
+        }
+        user.getFavorites().removeIf(favMovie -> favMovie.equals(movieList.get(0)));
     }
 
     @Override

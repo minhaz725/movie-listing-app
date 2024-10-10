@@ -2,6 +2,7 @@ package com.task.movie_listing_app.controller;
 
 import com.task.movie_listing_app.model.MovieModel;
 import com.task.movie_listing_app.model.UserModel;
+import com.task.movie_listing_app.payload.req.MovieAddOrRemoveToFavoriteRequest;
 import com.task.movie_listing_app.payload.req.UserCreationRequest;
 import com.task.movie_listing_app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,14 @@ public class UserController {
     }
 
     @PostMapping("/{email}/favorites")
-    public ResponseEntity<String> addMovieToFavorites(@PathVariable String email, @RequestBody MovieModel movie) {
-        userService.addToFavorites(email, movie);
+    public ResponseEntity<String> addMovieToFavorites(@PathVariable String email, @RequestBody MovieAddOrRemoveToFavoriteRequest request) {
+        userService.addToFavorites(email, request.getTitle());
         return ResponseEntity.ok("Movie added to favorites.");
     }
 
     @DeleteMapping("/{email}/favorites")
-    public ResponseEntity<String> removeMovieFromFavorites(@PathVariable String email, @RequestBody MovieModel movie) {
-        userService.removeFromFavorites(email, movie);
+    public ResponseEntity<String> removeMovieFromFavorites(@PathVariable String email, @RequestBody MovieAddOrRemoveToFavoriteRequest request) {
+        userService.removeFromFavorites(email, request.getTitle());
         return ResponseEntity.ok("Movie removed from favorites.");
     }
 
